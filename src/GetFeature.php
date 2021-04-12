@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Webmozart\Assert\Assert;
 
 final class GetFeature implements RequestHandlerInterface
 {
@@ -24,8 +25,11 @@ final class GetFeature implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $featureId = $request->getAttribute('feature_id');
+        Assert::string($featureId);
+
         try {
-            $feature = $this->featureFinder->get($request->getAttribute('feature_id'));
+            $feature = $this->featureFinder->get($featureId);
         } catch (FeatureNotFoundException $exception) {
             return $this->responseFactory->createResponse(404, 'Route Not Found.');
         }

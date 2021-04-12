@@ -16,6 +16,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Webmozart\Assert\Assert;
 
 final class PatchFeature implements RequestHandlerInterface
 {
@@ -42,39 +43,49 @@ final class PatchFeature implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $featureId = $request->getAttribute('feature_id');
+        Assert::string($featureId);
         $body = $request->getParsedBody();
+        Assert::isArray($body);
 
         $action = $body['action'];
+        Assert::string($action);
         $value = $body['value'] ?? null;
 
         if ('add_strategy' === $action) {
-            $this->addStrategy($action, $featureId, $value);
+            Assert::isArray($value);
+            $this->addStrategy($featureId, $value);
         }
         if ('remove_strategy' === $action) {
-            $this->removeStrategy($action, $featureId, $value);
+            Assert::string($value);
+            $this->removeStrategy($featureId, $value);
         }
         if ('enable_feature' === $action) {
-            $this->enableFeature($action, $featureId);
+            $this->enableFeature($featureId);
         }
         if ('disable_feature' === $action) {
-            $this->disableFeature($action, $featureId);
+            $this->disableFeature($featureId);
         }
 
         return $this->responseFactory->createResponse(202, 'Processed');
     }
 
-    private function addStrategy(string $action, string $featureId, array $strategy): void
+    private function addStrategy(string $featureId, array $strategy): void
     {
+        $strategyId = $strategy['id'];
+        Assert::string($strategyId);
+        $strategyType = $strategy['type'];
+        Assert::string($strategyType);
+
         $this->addStrategy->handle(
             AddStrategyCommand::withIdAndType(
                 $featureId,
-                $strategy['id'],
-                $strategy['type']
+                $strategyId,
+                $strategyType
             )
         );
     }
 
-    private function removeStrategy(string $action, string $featureId, string $strategyId): void
+    private function removeStrategy(string $featureId, string $strategyId): void
     {
         $this->removeStrategy->handle(
             RemoveStrategyCommand::withFeatureAndStrategyId(
@@ -84,14 +95,14 @@ final class PatchFeature implements RequestHandlerInterface
         );
     }
 
-    private function enableFeature(string $action, string $featureId): void
+    private function enableFeature(string $featureId): void
     {
         $this->enableFeature->handle(
             EnableFeatureCommand::withId($featureId)
         );
     }
 
-    private function disableFeature(string $action, string $featureId): void
+    private function disableFeature(string $featureId): void
     {
         $this->disableFeature->handle(
             DisableFeatureCommand::withId($featureId)

@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Webmozart\Assert\Assert;
 
 final class PostFeature implements RequestHandlerInterface
 {
@@ -24,8 +25,11 @@ final class PostFeature implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $featureId = $request->getAttribute('feature_id');
+        Assert::string($featureId);
+
         $this->createFeature->handle(
-            CreateFeatureCommand::disabled($request->getAttribute('feature_id'))
+            CreateFeatureCommand::disabled($featureId)
         );
 
         return $this->responseFactory->createResponse(201, 'Created');

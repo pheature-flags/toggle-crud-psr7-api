@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Webmozart\Assert\Assert;
 
 final class DeleteFeature implements RequestHandlerInterface
 {
@@ -23,8 +24,11 @@ final class DeleteFeature implements RequestHandlerInterface
     }
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $featureId = $request->getAttribute('feature_id');
+        Assert::string($featureId);
+
         $this->removeFeature->handle(
-            RemoveFeatureCommand::withId($request->getAttribute('feature_id'))
+            RemoveFeatureCommand::withId($featureId)
         );
 
         return $this->responseFactory->createResponse(204, 'Deleted');
