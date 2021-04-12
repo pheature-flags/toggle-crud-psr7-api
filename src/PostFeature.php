@@ -35,4 +35,3 @@ final class PostFeature implements RequestHandlerInterface
         return $this->responseFactory->createResponse(201, 'Created');
     }
 }
-    

@@ -69,6 +69,10 @@ final class PatchFeature implements RequestHandlerInterface
         return $this->responseFactory->createResponse(202, 'Processed');
     }
 
+    /**
+     * @param string $featureId
+     * @param array<string, string> $strategy
+     */
     private function addStrategy(string $featureId, array $strategy): void
     {
         $strategyId = $strategy['id'];
@@ -109,4 +113,3 @@ final class PatchFeature implements RequestHandlerInterface
         );
     }
 }
-    
