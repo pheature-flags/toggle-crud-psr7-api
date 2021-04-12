@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pheature\Crud\Psr7\Toggle;
 
+use InvalidArgumentException;
 use Pheature\Core\Toggle\Exception\FeatureNotFoundException;
 use Pheature\Core\Toggle\Read\FeatureFinder;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -26,11 +27,11 @@ final class GetFeature implements RequestHandlerInterface
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $featureId = $request->getAttribute('feature_id');
-        Assert::string($featureId);
 
         try {
+            Assert::string($featureId);
             $feature = $this->featureFinder->get($featureId);
-        } catch (FeatureNotFoundException $exception) {
+        } catch (FeatureNotFoundException | InvalidArgumentException $exception) {
             return $this->responseFactory->createResponse(404, 'Route Not Found.');
         }
 

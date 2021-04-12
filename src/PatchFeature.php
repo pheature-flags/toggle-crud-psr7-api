@@ -44,19 +44,20 @@ final class PatchFeature implements RequestHandlerInterface
     {
         $featureId = $request->getAttribute('feature_id');
         Assert::string($featureId);
+        /** @var array<string, string> $body */
         $body = $request->getParsedBody();
-        Assert::isArray($body);
-
-        $action = $body['action'];
+        $action = $body['action'] ?? null;
         Assert::string($action);
         $value = $body['value'] ?? null;
 
         if ('add_strategy' === $action) {
-            Assert::isArray($value);
-            $this->addStrategy($featureId, $value);
+            /** @var array<string, string> $value */
+            $strategyId = $value['id'];
+            $strategyType = $value['type'];
+            $this->addStrategy($featureId, $strategyId, $strategyType);
         }
         if ('remove_strategy' === $action) {
-            Assert::string($value);
+            /** @var string $value */
             $this->removeStrategy($featureId, $value);
         }
         if ('enable_feature' === $action) {
@@ -69,17 +70,8 @@ final class PatchFeature implements RequestHandlerInterface
         return $this->responseFactory->createResponse(202, 'Processed');
     }
 
-    /**
-     * @param string $featureId
-     * @param array<string, string> $strategy
-     */
-    private function addStrategy(string $featureId, array $strategy): void
+    private function addStrategy(string $featureId, string $strategyId, string $strategyType): void
     {
-        $strategyId = $strategy['id'];
-        Assert::string($strategyId);
-        $strategyType = $strategy['type'];
-        Assert::string($strategyType);
-
         $this->addStrategy->handle(
             AddStrategyCommand::withIdAndType(
                 $featureId,
