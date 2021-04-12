@@ -42,6 +42,9 @@ final class GetFeatureTest extends TestCase
     public function testItShouldHandleRequestAndPrepareGetFeatureResponse(): void
     {
         $feature = $this->createMock(Feature::class);
+        $feature->expects($this->once())
+            ->method('jsonSerialize')
+            ->willReturn(['feature_id' => 'some_feature_id']);
         $finder = $this->createMock(FeatureFinder::class);
         $finder->expects($this->once())
             ->method('get')
@@ -50,7 +53,7 @@ final class GetFeatureTest extends TestCase
         $stream = $this->createMock(StreamInterface::class);
         $stream->expects($this->once())
             ->method('write')
-            ->with('{}');
+            ->with('{"feature_id":"some_feature_id"}');
         $response = $this->createMock(ResponseInterface::class);
         $response->expects($this->once())
             ->method('withAddedHeader')
