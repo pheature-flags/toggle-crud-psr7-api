@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace Pheature\Test\Crud\Psr7\Toggle;
 
-use Pheature\Core\Toggle\Write\Feature;
+use Pheature\Core\Toggle\Write\FeatureId;
 use Pheature\Core\Toggle\Write\FeatureRepository;
-use Pheature\Crud\Psr7\Toggle\PostFeature;
-use Pheature\Crud\Toggle\Handler\CreateFeature;
+use Pheature\Crud\Psr7\Toggle\DeleteFeature;
+use Pheature\Crud\Toggle\Handler\RemoveFeature;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class PostFeatureTest extends TestCase
+final class DeleteFeatureTest extends TestCase
 {
     public function testItShouldReturnNotFoundResponseGivenInvalidFeatureId(): void
     {
@@ -30,11 +30,11 @@ final class PostFeatureTest extends TestCase
             ->with(404, 'Route Not Found.')
             ->willReturn($response);
 
-        $handler = new PostFeature(new CreateFeature($featureRepository), $responseFactory);
+        $handler = new DeleteFeature(new RemoveFeature($featureRepository), $responseFactory);
         $handler->handle($request);
     }
 
-    public function testItShouldHandleRequestAndReturnCreatedResponse(): void
+    public function testItShouldHandleRequestAndReturnNoContentResponse(): void
     {
         $request = $this->createMock(ServerRequestInterface::class);
         $request->expects($this->once())
@@ -44,17 +44,18 @@ final class PostFeatureTest extends TestCase
 
         $featureRepository = $this->createMock(FeatureRepository::class);
         $featureRepository->expects($this->once())
-            ->method('save')
-            ->with($this->isInstanceOf(Feature::class));
+            ->method('remove')
+            ->with($this->isInstanceOf(FeatureId::class));
 
         $response = $this->createMock(ResponseInterface::class);
         $responseFactory = $this->createMock(ResponseFactoryInterface::class);
         $responseFactory->expects($this->once())
             ->method('createResponse')
-            ->with(201, 'Created.')
+            ->with(204)
             ->willReturn($response);
 
-        $handler = new PostFeature(new CreateFeature($featureRepository), $responseFactory);
+
+        $handler = new DeleteFeature(new RemoveFeature($featureRepository), $responseFactory);
         $handler->handle($request);
     }
 }
