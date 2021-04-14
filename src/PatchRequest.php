@@ -17,12 +17,7 @@ final class PatchRequest
     private const ACTION_DISABLE_FEATURE = 'disable_feature';
     private const ACTION_ADD_STRATEGY = 'add_strategy';
     private const ACTION_REMOVE_STRATEGY = 'remove_strategy';
-    public const ACTIONS = [
-        self::ACTION_ENABLE_FEATURE,
-        self::ACTION_DISABLE_FEATURE,
-        self::ACTION_ADD_STRATEGY,
-        self::ACTION_REMOVE_STRATEGY,
-    ];
+
     private string $featureId;
     private string $action;
     /** @var array<string|mixed>|null  */
