@@ -43,23 +43,28 @@ final class PatchFeature implements RequestHandlerInterface
         }
 
         try {
-            $patchRequest = new PatchRequest($featureId, $request);
-            if ($patchRequest->isEnableFeatureAction()) {
-                $this->enableFeature->handle($patchRequest->enableFeatureCommand());
-            }
-            if ($patchRequest->isDisableFeatureAction()) {
-                $this->disableFeature->handle($patchRequest->disableFeatureCommand());
-            }
-            if ($patchRequest->isAddStrategyAction()) {
-                $this->addStrategy->handle($patchRequest->addStrategyCommand());
-            }
-            if ($patchRequest->isRemoveStrategyAction()) {
-                $this->removeStrategy->handle($patchRequest->removeStrategyCommand());
-            }
+            $this->handleRequest($featureId, $request);
         } catch (\InvalidArgumentException $exception) {
             return $this->responseFactory->createResponse(400, 'Bad request.');
         }
 
         return $this->responseFactory->createResponse(202, 'Processed.');
+    }
+
+    private function handleRequest(string $featureId, ServerRequestInterface $request): void
+    {
+        $patchRequest = new PatchRequest($featureId, $request);
+        if ($patchRequest->isEnableFeatureAction()) {
+            $this->enableFeature->handle($patchRequest->enableFeatureCommand());
+        }
+        if ($patchRequest->isDisableFeatureAction()) {
+            $this->disableFeature->handle($patchRequest->disableFeatureCommand());
+        }
+        if ($patchRequest->isAddStrategyAction()) {
+            $this->addStrategy->handle($patchRequest->addStrategyCommand());
+        }
+        if ($patchRequest->isRemoveStrategyAction()) {
+            $this->removeStrategy->handle($patchRequest->removeStrategyCommand());
+        }
     }
 }
