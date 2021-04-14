@@ -4,17 +4,22 @@ declare(strict_types=1);
 
 namespace Pheature\Crud\Psr7\Toggle;
 
-use InvalidArgumentException;
 use Pheature\Crud\Toggle\Command\AddStrategy;
+use Pheature\Crud\Toggle\Command\DisableFeature;
+use Pheature\Crud\Toggle\Command\EnableFeature;
 use Pheature\Crud\Toggle\Command\RemoveStrategy;
 use Psr\Http\Message\ServerRequestInterface;
 use Webmozart\Assert\Assert;
 
 final class PatchRequest
 {
+    private const ACTION_ENABLE_FEATURE = 'enable_feature';
+    private const ACTION_DISABLE_FEATURE = 'disable_feature';
     private const ACTION_ADD_STRATEGY = 'add_strategy';
     private const ACTION_REMOVE_STRATEGY = 'remove_strategy';
     public const ACTIONS = [
+        self::ACTION_ENABLE_FEATURE,
+        self::ACTION_DISABLE_FEATURE,
         self::ACTION_ADD_STRATEGY,
         self::ACTION_REMOVE_STRATEGY,
     ];
@@ -23,27 +28,14 @@ final class PatchRequest
     /** @var array<string|mixed>|null  */
     private ?array $requestData = null;
 
-    public function __construct(ServerRequestInterface $request)
+    public function __construct(string $featureId, ServerRequestInterface $request)
     {
-        $featureId = $request->getAttribute('feature_id');
-        Assert::string($featureId);
-
-        /** @var array<string, mixed> $body */
-        $body = $request->getParsedBody();
+        $body = (array)$request->getParsedBody();
         $action = $body['action'] ?? null;
-        if (false === is_string($action)) {
-            throw new InvalidArgumentException(
-                'The request body must have "action" key filled with one of valid actions.'
-            );
-        }
+        Assert::string($action);
 
         $value = $body['value'] ?? null;
-        if (false === is_null($value) && false === is_array($value)) {
-            throw new InvalidArgumentException(
-                'The request body must have "value" key filled with an array containing at least "strategy_id",'
-                . ' and "strategy_type" in some classes.'
-            );
-        }
+        Assert::nullOrIsArray($value);
 
         $this->featureId = $featureId;
         $this->action = $action;
@@ -77,6 +69,16 @@ final class PatchRequest
         );
     }
 
+    public function enableFeatureCommand(): EnableFeature
+    {
+        return EnableFeature::withId($this->featureId);
+    }
+
+    public function disableFeatureCommand(): DisableFeature
+    {
+        return DisableFeature::withId($this->featureId);
+    }
+
     public function isAddStrategyAction(): bool
     {
         return self::ACTION_ADD_STRATEGY === $this->action;
@@ -85,5 +87,15 @@ final class PatchRequest
     public function isRemoveStrategyAction(): bool
     {
         return self::ACTION_REMOVE_STRATEGY === $this->action;
+    }
+
+    public function isEnableFeatureAction(): bool
+    {
+        return self::ACTION_ENABLE_FEATURE === $this->action;
+    }
+
+    public function isDisableFeatureAction(): bool
+    {
+        return self::ACTION_DISABLE_FEATURE === $this->action;
     }
 }

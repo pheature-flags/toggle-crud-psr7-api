@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pheature\Test\Crud\Psr7\Toggle;
 
-use InvalidArgumentException;
 use Pheature\Core\Toggle\Write\Feature;
 use Pheature\Core\Toggle\Write\FeatureId;
 use Pheature\Core\Toggle\Write\FeatureRepository;
@@ -30,6 +29,23 @@ final class PatchFeatureTest extends TestCase
     private EnableFeature $enableFeature;
     private DisableFeature $disableFeature;
     private PatchFeature $handler;
+
+    public function testItShouldReturnNotFoundResponseGivenInvalidFeatureId(): void
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects($this->once())
+            ->method('getAttribute')
+            ->with('feature_id')
+            ->willReturn(2354356);
+        $response = $this->createMock(ResponseInterface::class);
+        $this->responseFactory->expects($this->once())
+            ->method('createResponse')
+            ->with(404, 'Route Not Found.')
+            ->willReturn($response);
+
+        $this->handler->handle($request);
+
+    }
 
     /** @dataProvider getInvalidRequestData */
     public function testItShouldReturnBadRequestResponseWhenTheActionIsNotPresent($body): void
@@ -122,11 +138,83 @@ final class PatchFeatureTest extends TestCase
         $this->handler->handle($request);
     }
 
+    public function testItShouldHandleEnableFeatureRequestAndReturnProcessedResponse(): void
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects($this->once())
+            ->method('getAttribute')
+            ->with('feature_id')
+            ->willReturn('some_id');
+        $request->expects($this->once())
+            ->method('getParsedBody')
+            ->willReturn([
+                'action' => 'enable_feature',
+            ]);
+
+        $featureId = FeatureId::fromString('some_id');
+        $feature = Feature::withId($featureId);
+        $this->repository->expects($this->once())
+            ->method('get')
+            ->with($this->isInstanceOf(FeatureId::class))
+            ->willReturn($feature);
+        $this->repository->expects($this->once())
+            ->method('save')
+            ->with($feature);
+
+        $response = $this->createMock(ResponseInterface::class);
+        $this->responseFactory->expects($this->once())
+            ->method('createResponse')
+            ->with(202, 'Processed.')
+            ->willReturn($response);
+
+        $this->assertFalse($feature->isEnabled());
+        $this->handler->handle($request);
+        $this->assertTrue($feature->isEnabled());
+    }
+
+    public function testItShouldHandleDisableFeatureRequestAndReturnProcessedResponse(): void
+    {
+        $request = $this->createMock(ServerRequestInterface::class);
+        $request->expects($this->once())
+            ->method('getAttribute')
+            ->with('feature_id')
+            ->willReturn('some_id');
+        $request->expects($this->once())
+            ->method('getParsedBody')
+            ->willReturn([
+                'action' => 'disable_feature',
+            ]);
+
+        $featureId = FeatureId::fromString('some_id');
+        $feature = Feature::withId($featureId);
+        $feature->enable();
+        $this->repository->expects($this->once())
+            ->method('get')
+            ->with($this->isInstanceOf(FeatureId::class))
+            ->willReturn($feature);
+        $this->repository->expects($this->once())
+            ->method('save')
+            ->with($feature);
+
+        $response = $this->createMock(ResponseInterface::class);
+        $this->responseFactory->expects($this->once())
+            ->method('createResponse')
+            ->with(202, 'Processed.')
+            ->willReturn($response);
+
+        $this->assertTrue($feature->isEnabled());
+        $this->handler->handle($request);
+        $this->assertFalse($feature->isEnabled());
+    }
+
     public function getInvalidRequestData(): array
     {
         return [
             'null request body' => [
                 null,
+            ],
+            'object request body' => [
+                new \StdClass(),
             ],
             'no action present in request body' => [
                 ['feature_id' => 'some_id']
@@ -139,6 +227,9 @@ final class PatchFeatureTest extends TestCase
             ],
             'null value for add_strategy action' => [
                 ['action' => 'add_strategy', 'value' => null]
+            ],
+            'string value for add_strategy action' => [
+                ['action' => 'add_strategy', 'value' => 'hello world!!']
             ],
             'null strategy_id value for add_strategy action' => [
                 ['action' => 'add_strategy', 'value' => ['strategy_id' => null, 'strategy_type' => 'some_type']]

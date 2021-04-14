@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Pheature\Crud\Psr7\Toggle;
 
-use Pheature\Crud\Toggle\Command\DisableFeature as DisableFeatureCommand;
-use Pheature\Crud\Toggle\Command\EnableFeature as EnableFeatureCommand;
 use Pheature\Crud\Toggle\Handler\AddStrategy;
 use Pheature\Crud\Toggle\Handler\DisableFeature;
 use Pheature\Crud\Toggle\Handler\EnableFeature;
@@ -14,7 +12,6 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Webmozart\Assert\Assert;
 
 final class PatchFeature implements RequestHandlerInterface
 {
@@ -40,8 +37,19 @@ final class PatchFeature implements RequestHandlerInterface
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
+        $featureId = $request->getAttribute('feature_id');
+        if (false === is_string($featureId)) {
+            return $this->responseFactory->createResponse(404, 'Route Not Found.');
+        }
+
         try {
-            $patchRequest = new PatchRequest($request);
+            $patchRequest = new PatchRequest($featureId, $request);
+            if ($patchRequest->isEnableFeatureAction()) {
+                $this->enableFeature->handle($patchRequest->enableFeatureCommand());
+            }
+            if ($patchRequest->isDisableFeatureAction()) {
+                $this->disableFeature->handle($patchRequest->disableFeatureCommand());
+            }
             if ($patchRequest->isAddStrategyAction()) {
                 $this->addStrategy->handle($patchRequest->addStrategyCommand());
             }
@@ -53,19 +61,5 @@ final class PatchFeature implements RequestHandlerInterface
         }
 
         return $this->responseFactory->createResponse(202, 'Processed.');
-    }
-
-    private function enableFeature(string $featureId): void
-    {
-        $this->enableFeature->handle(
-            EnableFeatureCommand::withId($featureId)
-        );
-    }
-
-    private function disableFeature(string $featureId): void
-    {
-        $this->disableFeature->handle(
-            DisableFeatureCommand::withId($featureId)
-        );
     }
 }
