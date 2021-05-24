@@ -8,7 +8,7 @@ use Pheature\Core\Toggle\Write\Feature;
 use Pheature\Core\Toggle\Write\FeatureId;
 use Pheature\Core\Toggle\Write\FeatureRepository;
 use Pheature\Crud\Psr7\Toggle\PatchFeature;
-use Pheature\Crud\Toggle\Handler\AddStrategy;
+use Pheature\Crud\Toggle\Handler\SetStrategy;
 use Pheature\Crud\Toggle\Handler\DisableFeature;
 use Pheature\Crud\Toggle\Handler\EnableFeature;
 use Pheature\Crud\Toggle\Handler\RemoveStrategy;
@@ -24,7 +24,7 @@ final class PatchFeatureTest extends TestCase
     private FeatureRepository $repository;
     /** @var MockObject|ResponseFactoryInterface */
     private ResponseFactoryInterface $responseFactory;
-    private AddStrategy $addStrategy;
+    private SetStrategy $addStrategy;
     private RemoveStrategy $removeStrategy;
     private EnableFeature $enableFeature;
     private DisableFeature $disableFeature;
@@ -79,7 +79,7 @@ final class PatchFeatureTest extends TestCase
         $request->expects($this->once())
             ->method('getParsedBody')
             ->willReturn([
-                'action' => 'add_strategy',
+                'action' => 'set_strategy',
                 'value' => [
                     'strategy_id' => 'some_strategy_id',
                     'strategy_type' => 'identity_matching_strategy',
@@ -222,35 +222,98 @@ final class PatchFeatureTest extends TestCase
             'array type action present in request body' => [
                 ['action' => []]
             ],
-            'invalid value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => []]
+            'invalid value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => []]
             ],
-            'null value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => null]
+            'null value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => null]
             ],
-            'string value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => 'hello world!!']
+            'string value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => 'hello world!!']
             ],
-            'null strategy_id value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_id' => null, 'strategy_type' => 'some_type']]
+            'null strategy_id value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_id' => null, 'strategy_type' => 'some_type']]
             ],
-            'invalid strategy_id value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_id' => [], 'strategy_type' => 'some_type']]
+            'invalid strategy_id value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_id' => [], 'strategy_type' => 'some_type']]
             ],
-            'not strategy_id for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_type' => 'some_type']]
+            'not strategy_id for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_type' => 'some_type']]
             ],
-            'not strategy_type for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_id' => 'some_id']]
+            'not strategy_type for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_id' => 'some_id']]
             ],
-            'null strategy_type value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_id' => 'some_id', 'strategy_type' => null]]
+            'null strategy_type value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_id' => 'some_id', 'strategy_type' => null]]
             ],
-            'invalid strategy_type value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_id' => 'some_id', 'strategy_type' => []]]
+            'invalid strategy_type value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_id' => 'some_id', 'strategy_type' => []]]
             ],
-            'object strategy_type value for add_strategy action' => [
-                ['action' => 'add_strategy', 'value' => ['strategy_id' => 'some_id', 'strategy_type' => new \StdClass()]]
+            'object strategy_type value for set_strategy action' => [
+                ['action' => 'set_strategy', 'value' => ['strategy_id' => 'some_id', 'strategy_type' => new \StdClass()]]
+            ],
+            'not segment_id for set_strategy_action with segments' => [
+                ['action' => 'set_strategy', 'value' => [
+                    'strategy_id' => 'some_id',
+                    'strategy_type' => 'some_strategy',
+                    'segments' => [[
+                        'segment_type' => 'some_segment_type',
+                        'criteria' => []
+                    ]]
+                ]]
+            ],
+            'invalid segment_id for set_strategy_action with segments' => [
+                ['action' => 'set_strategy', 'value' => [
+                    'strategy_id' => 'some_id',
+                    'strategy_type' => 'some_strategy',
+                    'segments' => [[
+                        'segment_id' => null,
+                        'segment_type' => 'some_segment_type',
+                        'criteria' => [],
+                    ]]
+                ]]
+            ],
+            'not segment_type for set_strategy_action with segments' => [
+                ['action' => 'set_strategy', 'value' => [
+                    'strategy_id' => 'some_id',
+                    'strategy_type' => 'some_strategy',
+                    'segments' => [[
+                        'segment_id' => 'some_segment',
+                        'criteria' => [],
+                    ]]
+                ]]
+            ],
+            'invalid segment_type for set_strategy_action with segments' => [
+                ['action' => 'set_strategy', 'value' => [
+                    'strategy_id' => 'some_id',
+                    'strategy_type' => 'some_strategy',
+                    'segments' => [[
+                        'segment_id' => 'some_segment',
+                        'segment_type' => null,
+                        'criteria' => [],
+                    ]]
+                ]]
+            ],
+            'not criteria for set_strategy_action with segments' => [
+                ['action' => 'set_strategy', 'value' => [
+                    'strategy_id' => 'some_id',
+                    'strategy_type' => 'some_strategy',
+                    'segments' => [[
+                        'segment_id' => 'some_segment',
+                        'segment_type' => 'some_type',
+                    ]]
+                ]]
+            ],
+            'invalid criteria for set_strategy_action with segments' => [
+                ['action' => 'set_strategy', 'value' => [
+                    'strategy_id' => 'some_id',
+                    'strategy_type' => 'some_strategy',
+                    'segments' => [[
+                        'segment_id' => 'some_segment',
+                        'segment_type' => 'some_type',
+                        'criteria' => 'invalid criteria',
+                    ]]
+                ]]
             ],
             'invalid value for remove_strategy action' => [
                 ['action' => 'remove_strategy', 'value' => []]
@@ -271,7 +334,7 @@ final class PatchFeatureTest extends TestCase
     {
         $this->repository = $this->createMock(FeatureRepository::class);
         $this->responseFactory = $this->createMock(ResponseFactoryInterface::class);
-        $this->addStrategy = new AddStrategy($this->repository);
+        $this->addStrategy = new SetStrategy($this->repository);
         $this->removeStrategy = new RemoveStrategy($this->repository);
         $this->enableFeature = new EnableFeature($this->repository);
         $this->disableFeature = new DisableFeature($this->repository);
