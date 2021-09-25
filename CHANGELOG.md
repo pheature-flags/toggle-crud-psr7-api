@@ -1,8 +1,8 @@
 # Changelog
 
-## [v0.1.2](https://github.com/pheature-flags/pheature-flags/tree/v0.1.2) (2021-09-25)
+## [Unreleased](https://github.com/pheature-flags/pheature-flags/tree/HEAD)
 
-[Full Changelog](https://github.com/pheature-flags/pheature-flags/compare/v0.1.1...v0.1.2)
+[Full Changelog](https://github.com/pheature-flags/pheature-flags/compare/v0.1.1...HEAD)
 
 **Fixed bugs:**
 
@@ -15,6 +15,7 @@
 **Merged pull requests:**
 
 - \[toggle-crud-psr7-api\] add codeclimate badge [\#239](https://github.com/pheature-flags/pheature-flags/pull/239) (@kpicaza)
+- \[toggle-crud-psr7-api\] add scrutinizer badge [\#237](https://github.com/pheature-flags/pheature-flags/pull/237) (@kpicaza)
 
 ## [v0.1.1](https://github.com/pheature-flags/pheature-flags/tree/v0.1.1) (2021-06-20)
 
@@ -30,5 +31,4 @@
 
 **Merged pull requests:**
 
-- \[toggle-crud-psr7-api\] add scrutinizer badge [\#237](https://github.com/pheature-flags/pheature-flags/pull/237) (@kpicaza)
 - \[\#86\] Fix toggle-crud-psr7-api coding standards [\#104](https://github.com/pheature-flags/pheature-flags/pull/104) (@pcs289)
