@@ -1,5 +1,14 @@
 # Changelog
 
+## [v0.2.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.2.0)
+
+[Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/v0.1.2...0.2.0)
+
+**Merged pull requests:**
+
+- \[\#6\] update pheature flags deps to ^0.2 [\#7](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/7) (@kpicaza)
+- Update infection/infection requirement from ^0.23.0 to ^0.23.0 || ^0.25.0 [\#4](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/4) (@dependabot[bot])
+
 ## [v0.1.2](https://github.com/pheature-flags/pheature-flags/tree/v0.1.2)
 
 [Full Changelog](https://github.com/pheature-flags/pheature-flags/compare/v0.1.1...v0.1.2)
