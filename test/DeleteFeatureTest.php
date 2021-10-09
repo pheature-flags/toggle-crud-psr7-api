@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Pheature\Test\Crud\Psr7\Toggle;
 
+use Pheature\Core\Toggle\Write\Feature;
 use Pheature\Core\Toggle\Write\FeatureId;
 use Pheature\Core\Toggle\Write\FeatureRepository;
 use Pheature\Crud\Psr7\Toggle\DeleteFeature;
 use Pheature\Crud\Toggle\Handler\RemoveFeature;
+use Pheature\InMemory\Toggle\InMemoryFeatureRepository;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -42,10 +44,8 @@ final class DeleteFeatureTest extends TestCase
             ->with('feature_id')
             ->willReturn('some_id');
 
-        $featureRepository = $this->createMock(FeatureRepository::class);
-        $featureRepository->expects($this->once())
-            ->method('remove')
-            ->with($this->isInstanceOf(FeatureId::class));
+        $featureRepository = new InMemoryFeatureRepository();
+        $featureRepository->save(new Feature(FeatureId::fromString('some_id'), false, []));
 
         $response = $this->createMock(ResponseInterface::class);
         $responseFactory = $this->createMock(ResponseFactoryInterface::class);
