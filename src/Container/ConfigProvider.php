@@ -15,11 +15,12 @@ use Pheature\Crud\Psr7\Toggle\GetFeatures;
 use Pheature\Crud\Psr7\Toggle\PatchFeature;
 use Pheature\Crud\Psr7\Toggle\PostFeature;
 
+/**
+ * @psalm-type CrudPsr7Config array{dependencies: array{factories: array<string, string>}}
+ */
 final class ConfigProvider
 {
-    /**
-     * @return array<string, array<string, array<string, string>>>
-     */
+    /** @return CrudPsr7Config */
     public function __invoke(): array
     {
         return [

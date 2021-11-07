@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Webmozart\Assert\Assert;
 
+use function json_encode;
+
 final class GetFeature implements RequestHandlerInterface
 {
     private FeatureFinder $featureFinder;
