@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pheature\Crud\Psr7\Toggle;
 
-use Pheature\Crud\Psr7\Toggle\PostFeature;
 use Pheature\Crud\Toggle\Handler\CreateFeature;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;

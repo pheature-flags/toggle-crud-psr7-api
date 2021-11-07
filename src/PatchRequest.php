@@ -20,14 +20,13 @@ final class PatchRequest
 
     private string $featureId;
     private string $action;
-    /**
-     * @var array<string|mixed>|null
-     */
+    /** @var array<string|mixed>|null */
     private ?array $requestData = null;
 
     public function __construct(string $featureId, ServerRequestInterface $request)
     {
-        $body = (array)$request->getParsedBody();
+        $body = $request->getParsedBody();
+        Assert::isArray($body);
         $action = $body['action'] ?? null;
         Assert::string($action);
 

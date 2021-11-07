@@ -10,6 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
+use function json_encode;
+
 final class GetFeatures implements RequestHandlerInterface
 {
     private FeatureFinder $featureFinder;
