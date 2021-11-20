@@ -16,7 +16,7 @@
         }
     ],
     "require": {
-        "php": "^7.4|^8.0",
+        "php": "^7.4|>=8.0",
         "pheature/toggle-core": "^0.2",
         "pheature/toggle-crud": "^0.2",
         "psr/http-factory": "^1.0",
@@ -28,6 +28,7 @@
         "icanhazstring/composer-unused": "^0.7.5",
         "infection/infection": "^0.25",
         "pheature/inmemory-toggle": "^0.2.0",
+        "phpcompatibility/php-compatibility": "^9.3",
         "phpro/grumphp": "^1.0",
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^1.0",
