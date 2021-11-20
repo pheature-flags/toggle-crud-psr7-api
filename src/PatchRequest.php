@@ -11,6 +11,9 @@ use Pheature\Crud\Toggle\Command\RemoveStrategy;
 use Psr\Http\Message\ServerRequestInterface;
 use Webmozart\Assert\Assert;
 
+/**
+ * @psalm-import-type WriteSegment from \Pheature\Core\Toggle\Write\Segment
+ */
 final class PatchRequest
 {
     private const ACTION_ENABLE_FEATURE = 'enable_feature';
@@ -45,7 +48,7 @@ final class PatchRequest
         Assert::keyExists($this->requestData, 'strategy_type');
         Assert::string($this->requestData['strategy_id']);
         Assert::string($this->requestData['strategy_type']);
-        /** @var array<array<string, mixed>>|null $segments */
+        /** @var array<array<string, array<string, mixed>|string>>|null $segments */
         $segments = $this->requestData['segments'] ?? [];
         Assert::isArray($segments);
         foreach ($segments as $segment) {
@@ -55,6 +58,7 @@ final class PatchRequest
             Assert::string($segment['segment_id']);
             Assert::string($segment['segment_type']);
             Assert::isArray($segment['criteria']);
+            /** @var WriteSegment $segment */
         }
 
         return SetStrategy::withIdTypeAndSegments(

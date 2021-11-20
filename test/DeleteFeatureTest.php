@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pheature\Test\Crud\Psr7\Toggle;
 
+use Pheature\Core\Toggle\Write\Event\FeatureWasRemoved;
 use Pheature\Core\Toggle\Write\Feature;
 use Pheature\Core\Toggle\Write\FeatureId;
 use Pheature\Core\Toggle\Write\FeatureRepository;
@@ -46,6 +47,7 @@ final class DeleteFeatureTest extends TestCase
 
         $featureRepository = new InMemoryFeatureRepository();
         $featureRepository->save(new Feature(FeatureId::fromString('some_id'), false, []));
+        $feature = $featureRepository->get(FeatureId::fromString('some_id'));
 
         $response = $this->createMock(ResponseInterface::class);
         $responseFactory = $this->createMock(ResponseFactoryInterface::class);
@@ -54,8 +56,12 @@ final class DeleteFeatureTest extends TestCase
             ->with(204)
             ->willReturn($response);
 
-
         $handler = new DeleteFeature(new RemoveFeature($featureRepository), $responseFactory);
         $handler->handle($request);
+
+        $events = $feature->release();
+        self::assertCount(1, $events);
+        $event = reset($events);
+        self::assertInstanceOf(FeatureWasRemoved::class, $event);
     }
 }
