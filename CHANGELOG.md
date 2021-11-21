@@ -1,6 +1,28 @@
 # Changelog
 
-## [v0.2.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.2.0)
+## [0.3.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.3.0) (2021-11-21)
+
+[Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.2.0...0.3.0)
+
+**Implemented enhancements:**
+
+- \[toggle-crud-psr7-api\] Update PhpStan to version 1 and level 9 [\#10](https://github.com/pheature-flags/toggle-crud-psr7-api/issues/10)
+- \[toggle-crud-psr7-api\] Add PHP 8.1 support [\#8](https://github.com/pheature-flags/toggle-crud-psr7-api/issues/8)
+- \[\#8\] Add support for PHP 8.1 [\#15](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/15) (@kpicaza)
+- \[\#16\] small cleanups [\#14](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/14) (@kpicaza)
+- \[\#10\] Update PhpStan to version 1 and level 9 [\#11](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/11) (@kpicaza)
+
+**Closed issues:**
+
+- \[toggle-crud-psr7-api\] update CI matrix PHP versions [\#12](https://github.com/pheature-flags/toggle-crud-psr7-api/issues/12)
+- Bump pheature-flags to ^0.2 [\#6](https://github.com/pheature-flags/toggle-crud-psr7-api/issues/6)
+
+**Merged pull requests:**
+
+- \[\#8\] Bump deps to pheature-flags 0.3.0 [\#16](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/16) (@kpicaza)
+- \[\#12\] Run CI both PHP 7.4 and 8.0 [\#13](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/13) (@kpicaza)
+
+## [0.2.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.2.0) (2021-10-09)
 
 [Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/v0.1.2...0.2.0)
 
