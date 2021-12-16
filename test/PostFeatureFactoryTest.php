@@ -27,7 +27,7 @@ final class PostFeatureFactoryTest extends TestCase
         $factory = new PostFeatureFactory();
         $actual = $factory->__invoke($container);
 
-        self::assertInstanceOf(PostFeature::class, $actual);
+        $this->assertInstanceOf(PostFeature::class, $actual);
     }
 
     public function testItShouldCreateAPostFeatureFromCreate(): void
@@ -40,6 +40,6 @@ final class PostFeatureFactoryTest extends TestCase
             $responseFactory
         );
 
-        self::assertInstanceOf(PostFeature::class, $actual);
+        $this->assertInstanceOf(PostFeature::class, $actual);
     }
 }

@@ -60,8 +60,8 @@ final class DeleteFeatureTest extends TestCase
         $handler->handle($request);
 
         $events = $feature->release();
-        self::assertCount(1, $events);
+        $this->assertCount(1, $events);
         $event = reset($events);
-        self::assertInstanceOf(FeatureWasRemoved::class, $event);
+        $this->assertInstanceOf(FeatureWasRemoved::class, $event);
     }
 }
