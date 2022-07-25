@@ -1,5 +1,19 @@
 # Changelog
 
+## [Unreleased](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/HEAD)
+
+[Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.3.0...HEAD)
+
+**Implemented enhancements:**
+
+- \[toggle-crud-psr7-api\] Update issue template for bugs using new issue form in a YAML file [\#5](https://github.com/pheature-flags/toggle-crud-psr7-api/issues/5)
+- Improve assertion methods call for consistency [\#17](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/17) (@peter279k)
+
+**Merged pull requests:**
+
+- allow executing some composer plugins in dev mode [\#21](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/21) (@kpicaza)
+- \[\#5\] Update Bug Report Template [\#18](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/18) (@pcs289)
+
 ## [0.3.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.3.0) (2021-11-21)
 
 [Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.2.0...0.3.0)
