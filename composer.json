@@ -27,7 +27,7 @@
     "require-dev": {
         "icanhazstring/composer-unused": "^0.7.5",
         "infection/infection": "^0.25",
-        "pheature/inmemory-toggle": "^0.3",
+        "pheature/inmemory-toggle": "^0.3 || ^0.4",
         "phpcompatibility/php-compatibility": "^9.3",
         "phpro/grumphp": "^1.0",
         "phpstan/extension-installer": "^1.1",
