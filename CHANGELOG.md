@@ -1,6 +1,15 @@
 # Changelog
 
-## [0.5.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.5.0)
+## [0.7.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.7.0)
+
+[Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.5.0...0.7.0)
+
+**Merged pull requests:**
+
+- \[\#359\] Add PHP 8.2 support [\#29](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/29) (@kpicaza)
+- update dev dependencies [\#26](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/26) (@kpicaza)
+
+## [0.5.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.5.0) (2022-08-12)
 
 [Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.4.0...0.5.0)
 
