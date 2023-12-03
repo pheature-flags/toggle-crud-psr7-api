@@ -1,6 +1,19 @@
 # Changelog
 
-## [0.7.1](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.7.1)
+## [0.8.0](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.8.0)
+
+[Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.7.2...0.8.0)
+
+**Merged pull requests:**
+
+- update psalm to 5.16 [\#36](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/36) (@kpicaza)
+- update php versions support [\#35](https://github.com/pheature-flags/toggle-crud-psr7-api/pull/35) (@kpicaza)
+
+## [0.7.2](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.7.2) (2023-10-15)
+
+[Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.7.1...0.7.2)
+
+## [0.7.1](https://github.com/pheature-flags/toggle-crud-psr7-api/tree/0.7.1) (2022-12-12)
 
 [Full Changelog](https://github.com/pheature-flags/toggle-crud-psr7-api/compare/0.7.0...0.7.1)
 
